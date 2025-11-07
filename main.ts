@@ -1,11 +1,21 @@
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     bird.setVelocity(0, -100)
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    bird.startEffect(effects.ashes)
+    bird.sayText(":(")
+    game.gameOver(false)
+})
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     bird.setVelocity(0, 50)
 })
-let candy: Sprite = null
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    info.changeScoreBy(5)
+    sprites.destroy(candy)
+    bird.startEffect(effects.fire)
+})
 let myEnemy: Sprite = null
+let candy: Sprite = null
 let bird: Sprite = null
 bird = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
@@ -134,16 +144,23 @@ bird,
 200,
 true
 )
-controller.moveSprite(bird, 0, 100)
 info.setScore(0)
+music.play(music.createSong(assets.song`funMusic0`), music.PlaybackMode.LoopingInBackground)
 scene.setBackgroundImage(assets.image`background`)
-scroller.scrollBackgroundWithSpeed(-70, 0)
-music.play(music.createSong(assets.song`funMusic`), music.PlaybackMode.LoopingInBackground)
+scroller.scrollBackgroundWithSpeed(-100, 0)
+bird.setVelocity(0, 50)
 bird.setStayInScreen(true)
 forever(function () {
     myEnemy = sprites.createProjectileFromSide(assets.image`pillar`, -90, 0)
     myEnemy.y = randint(15, 115)
+    pause(2000)
+    sprites.destroy(myEnemy, effects.spray, 500)
+    bird.sayText(":)")
+    bird.startEffect(effects.rings)
+})
+forever(function () {
     pause(1000)
+    info.changeScoreBy(1)
 })
 forever(function () {
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
@@ -166,5 +183,7 @@ forever(function () {
         . . . . . . . . . c c c c c . . 
         `, SpriteKind.Food)
     candy.y = randint(15, 115)
-    pause(2000)
+    candy.x = 230
+    myEnemy.follow(bird, 20)
+    pause(5000)
 })
