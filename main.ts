@@ -1,20 +1,50 @@
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     bird.setVelocity(0, -100)
 })
+function checkEnemyMove () {
+    if (enemyMove == 1) {
+        myEnemy.follow(bird, followSpeed)
+    } else {
+        myEnemy.follow(bird, 0)
+    }
+}
+function easyLevel () {
+    setup(3000, 5000, 50, 0)
+}
+function mediumLevel () {
+    setup(3000, 5000, 180, 1)
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     game.gameOver(false)
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     bird.setVelocity(0, 50)
 })
+function hardLevel () {
+    setup(2700, 2900, 230, 1)
+    followSpeed = 15
+}
+function setup (enemyDelay: number, candyDelay: number, num3: number, num4: number) {
+    candyGen = candyDelay
+    enemyGenTime = enemyDelay
+    enemyMovementSpeed = num3
+    enemyMove = num4
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(5)
     sprites.destroy(candy)
     bird.startEffect(effects.fire, 500)
 })
-let myEnemy: Sprite = null
 let candy: Sprite = null
+let enemyMovementSpeed = 0
+let enemyGenTime = 0
+let candyGen = 0
+let myEnemy: Sprite = null
+let enemyMove = 0
 let bird: Sprite = null
+let followSpeed = 0
+followSpeed = 20
+mediumLevel()
 music.play(music.createSong(assets.song`up up up`), music.PlaybackMode.LoopingInBackground)
 bird = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
@@ -34,7 +64,7 @@ bird = sprites.create(img`
     . . . . c c d d d 5 5 5 b b . . 
     . . . . . . c c c c c b b . . . 
     `, SpriteKind.Player)
-let pillarLoc = 0
+bird.x = 30
 animation.runImageAnimation(
 bird,
 [img`
@@ -148,10 +178,12 @@ scene.setBackgroundImage(assets.image`background`)
 scroller.scrollBackgroundWithSpeed(-100, 0)
 bird.setVelocity(0, 50)
 bird.setStayInScreen(true)
+music.play(music.createSong(assets.song`funMusic0`), music.PlaybackMode.LoopingInBackground)
 forever(function () {
-    myEnemy = sprites.createProjectileFromSide(assets.image`pillar`, -90, 0)
+    myEnemy = sprites.createProjectileFromSide(assets.image`pillar`, enemyMovementSpeed * -1, 0)
     myEnemy.y = randint(15, 115)
-    pause(2000)
+    checkEnemyMove()
+    pause(enemyGenTime)
     sprites.destroy(myEnemy, effects.spray, 500)
 })
 forever(function () {
@@ -180,10 +212,9 @@ forever(function () {
         `, SpriteKind.Food)
     candy.y = randint(15, 115)
     candy.x = 230
-    myEnemy.follow(bird, 20)
-    pause(5000)
+    pause(candyGen)
 })
 forever(function () {
-    candy.x += -1
+    candy.x += -2.5
     pause(1)
 })
