@@ -15,6 +15,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
 let myEnemy: Sprite = null
 let candy: Sprite = null
 let bird: Sprite = null
+music.play(music.createSong(assets.song`up up up`), music.PlaybackMode.LoopingInBackground)
 bird = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
     . . . . . . . . . b 5 b . . . . 
@@ -143,7 +144,6 @@ bird,
 true
 )
 info.setScore(0)
-music.play(music.createSong(assets.song`funMusic0`), music.PlaybackMode.LoopingInBackground)
 scene.setBackgroundImage(assets.image`background`)
 scroller.scrollBackgroundWithSpeed(-100, 0)
 bird.setVelocity(0, 50)
