@@ -1,6 +1,13 @@
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    bird.setVelocity(0, -100)
+})
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+    bird.setVelocity(0, 50)
+})
 let candy: Sprite = null
 let myEnemy: Sprite = null
-let bird = sprites.create(img`
+let bird: Sprite = null
+bird = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
     . . . . . . . . . b 5 b . . . . 
     . . . . . . b b b b b b . . . . 
@@ -132,13 +139,32 @@ info.setScore(0)
 scene.setBackgroundImage(assets.image`background`)
 scroller.scrollBackgroundWithSpeed(-70, 0)
 music.play(music.createSong(assets.song`funMusic`), music.PlaybackMode.LoopingInBackground)
+bird.setStayInScreen(true)
 forever(function () {
     myEnemy = sprites.createProjectileFromSide(assets.image`pillar`, -90, 0)
     myEnemy.y = randint(15, 115)
     pause(1000)
 })
 forever(function () {
-    candy = sprites.createProjectileFromSide(assets.image`candy`, -90, 0)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+    candy = sprites.create(img`
+        . . . . . . . . . . . 6 6 6 6 6 
+        . . . . . . . . . 6 6 7 7 7 7 8 
+        . . . . . . 8 8 8 7 7 8 8 6 8 8 
+        . . e e e e c 6 6 8 8 . 8 7 8 . 
+        . e 2 5 4 2 e c 8 . . . 6 7 8 . 
+        e 2 4 2 2 2 2 2 c . . . 6 7 8 . 
+        e 2 2 2 2 2 2 2 c . . . 8 6 8 . 
+        e 2 e e 2 2 2 2 e e e e c 6 8 . 
+        c 2 e e 2 2 2 2 e 2 5 4 2 c 8 . 
+        . c 2 e e e 2 e 2 4 2 2 2 2 c . 
+        . . c 2 2 2 e e 2 2 2 2 2 2 2 e 
+        . . . e c c e c 2 2 2 2 2 2 2 e 
+        . . . . . . . c 2 e e 2 2 e 2 c 
+        . . . . . . . c e e e e e e 2 c 
+        . . . . . . . . c e 2 2 2 2 c . 
+        . . . . . . . . . c c c c c . . 
+        `, SpriteKind.Food)
     candy.y = randint(15, 115)
-    pause(5000)
+    pause(2000)
 })
