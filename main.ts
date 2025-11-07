@@ -35,6 +35,21 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     sprites.destroy(candy)
     bird.startEffect(effects.fire, 500)
 })
+function askLevel () {
+    if (game.ask("Easy? A = Yes, B = No")) {
+        easyLevel()
+    } else {
+        if (game.ask("Medium? A = Yes, B = No")) {
+            mediumLevel()
+        } else {
+            if (game.ask("Impossible? A = Yes, B = No")) {
+                hardLevel()
+            } else {
+                askLevel()
+            }
+        }
+    }
+}
 let candy: Sprite = null
 let enemyMovementSpeed = 0
 let enemyGenTime = 0
@@ -43,6 +58,7 @@ let myEnemy: Sprite = null
 let enemyMove = 0
 let bird: Sprite = null
 let followSpeed = 0
+askLevel()
 followSpeed = 20
 mediumLevel()
 music.play(music.createSong(assets.song`up up up`), music.PlaybackMode.LoopingInBackground)
@@ -187,10 +203,6 @@ forever(function () {
     sprites.destroy(myEnemy, effects.spray, 500)
 })
 forever(function () {
-    pause(5000)
-    info.changeScoreBy(1)
-})
-forever(function () {
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
     candy = sprites.create(img`
         . . . . . . . . . . . 6 6 6 6 6 
@@ -213,6 +225,10 @@ forever(function () {
     candy.y = randint(15, 115)
     candy.x = 230
     pause(candyGen)
+})
+forever(function () {
+    pause(5000)
+    info.changeScoreBy(1)
 })
 forever(function () {
     candy.x += -2.5
