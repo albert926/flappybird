@@ -2,8 +2,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     bird.setVelocity(0, -100)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    bird.startEffect(effects.ashes)
-    bird.sayText(":(")
     game.gameOver(false)
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
@@ -12,7 +10,7 @@ controller.A.onEvent(ControllerButtonEvent.Released, function () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(5)
     sprites.destroy(candy)
-    bird.startEffect(effects.fire)
+    bird.startEffect(effects.fire, 500)
 })
 let myEnemy: Sprite = null
 let candy: Sprite = null
@@ -155,11 +153,9 @@ forever(function () {
     myEnemy.y = randint(15, 115)
     pause(2000)
     sprites.destroy(myEnemy, effects.spray, 500)
-    bird.sayText(":)")
-    bird.startEffect(effects.rings)
 })
 forever(function () {
-    pause(1000)
+    pause(5000)
     info.changeScoreBy(1)
 })
 forever(function () {
@@ -186,4 +182,8 @@ forever(function () {
     candy.x = 230
     myEnemy.follow(bird, 20)
     pause(5000)
+})
+forever(function () {
+    candy.x += -1
+    pause(1)
 })
