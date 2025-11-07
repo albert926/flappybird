@@ -127,10 +127,11 @@ bird,
 200,
 true
 )
-controller.moveSprite(bird)
+controller.moveSprite(bird, 0, 100)
 info.setScore(0)
 scene.setBackgroundImage(assets.image`background`)
-music.play(music.createSong(assets.song`funMusic`), music.PlaybackMode.UntilDone)
+scroller.scrollBackgroundWithSpeed(-70, 0)
+music.play(music.createSong(assets.song`funMusic`), music.PlaybackMode.LoopingInBackground)
 forever(function () {
     myEnemy = sprites.createProjectileFromSide(assets.image`pillar`, -90, 0)
     myEnemy.y = randint(15, 115)
