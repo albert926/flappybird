@@ -15,6 +15,8 @@ function mediumLevel () {
     setup(3000, 5000, 180, 1)
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    music.stopAllSounds()
+    music.play(music.createSong(assets.song`funMusic0`), music.PlaybackMode.LoopingInBackground)
     game.gameOver(false)
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
@@ -24,36 +26,32 @@ function hardLevel () {
     setup(2700, 2900, 230, 1)
     followSpeed = 15
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite2, otherSprite2) {
+    info.changeScoreBy(5)
+    sprites.destroy(candy)
+    bird.startEffect(effects.fire, 500)
+})
 function setup (enemyDelay: number, candyDelay: number, num3: number, num4: number) {
     candyGen = candyDelay
     enemyGenTime = enemyDelay
     enemyMovementSpeed = num3
     enemyMove = num4
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    info.changeScoreBy(5)
-    sprites.destroy(candy)
-    bird.startEffect(effects.fire, 500)
-})
 function askLevel () {
     if (game.ask("Easy? A = Yes, B = No")) {
         easyLevel()
+    } else if (game.ask("Medium? A = Yes, B = No")) {
+        mediumLevel()
+    } else if (game.ask("Impossible? A = Yes, B = No")) {
+        hardLevel()
     } else {
-        if (game.ask("Medium? A = Yes, B = No")) {
-            mediumLevel()
-        } else {
-            if (game.ask("Impossible? A = Yes, B = No")) {
-                hardLevel()
-            } else {
-                askLevel()
-            }
-        }
+        askLevel()
     }
 }
-let candy: Sprite = null
 let enemyMovementSpeed = 0
 let enemyGenTime = 0
 let candyGen = 0
+let candy: Sprite = null
 let myEnemy: Sprite = null
 let enemyMove = 0
 let bird: Sprite = null
@@ -194,7 +192,6 @@ scene.setBackgroundImage(assets.image`background`)
 scroller.scrollBackgroundWithSpeed(-100, 0)
 bird.setVelocity(0, 50)
 bird.setStayInScreen(true)
-music.play(music.createSong(assets.song`funMusic0`), music.PlaybackMode.LoopingInBackground)
 forever(function () {
     myEnemy = sprites.createProjectileFromSide(assets.image`pillar`, enemyMovementSpeed * -1, 0)
     myEnemy.y = randint(15, 115)
@@ -227,10 +224,10 @@ forever(function () {
     pause(candyGen)
 })
 forever(function () {
-    pause(5000)
-    info.changeScoreBy(1)
-})
-forever(function () {
     candy.x += -2.5
     pause(1)
+})
+forever(function () {
+    pause(5000)
+    info.changeScoreBy(1)
 })
