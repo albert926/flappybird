@@ -20,6 +20,7 @@ function mediumLevel () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     music.stopAllSounds()
     music.play(music.createSong(assets.song`funMusic0`), music.PlaybackMode.LoopingInBackground)
+    music.play(music.melodyPlayable(music.wawawawaa), music.PlaybackMode.InBackground)
     game.gameOver(false)
 })
 function updateAnimation () {
@@ -92,6 +93,7 @@ function hardLevel () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite2, otherSprite2) {
     info.changeScoreBy(5)
     sprites.destroy(candy)
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     bird.startEffect(effects.fire, 500)
 })
 function setup (enemyDelay: number, candyDelay: number, num3: number, num4: number) {
