@@ -124,8 +124,9 @@ let bird: Sprite = null
 let followSpeed = 0
 askLevel()
 followSpeed = 20
-mediumLevel()
-music.play(music.createSong(assets.song`up up up`), music.PlaybackMode.LoopingInBackground)
+if (game.ask("Play music?")) {
+    music.play(music.createSong(assets.song`up up up`), music.PlaybackMode.LoopingInBackground)
+}
 bird = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
     . . . . . . . . . b 5 b . . . . 
